@@ -52,6 +52,7 @@ def damages_calculation(player):
         print("%s miss!" % (player.name))
         return 0
     elif evaluate_chance(player.chance_for_critcal_hit):
+        print("%s's attack succeeded!" %(player.name))
         print("It's a critical hit!")
         return player.critical_damage
     else:
@@ -64,3 +65,81 @@ def evaluate_chance(chance):
         return True
     else:
         return False
+
+# Create game
+class Game:
+    player1 = Player()
+    enemy1 = Player()
+    enemy2 = Player()
+    enemy3 = Player()
+    enemy4 = Player()
+    enemy5 = Player()
+
+    bow = Weapon()
+    gun = Weapon()
+    bazooka = Weapon()
+
+    def start(self):
+        pass
+
+    def choose_weapon(self):
+        pass
+
+    def fighting_part(self):
+        player = self.player1
+        enemy_list = [self.enemy1,
+                      self.enemy2,
+                      self.enemy3,
+                      self.enemy4,
+                      self.enemy5]
+
+        for enemy in enemy_list:
+            player_start = True
+            while enemy.hp > 0 or player.hp > 0:
+                if player_start:
+                    player.attack(enemy)
+                else:
+                    enemy.attack(player)
+            
+            if player.hp <= 0:
+                self.end(False)
+            else:
+                print("You defeated %s." %(enemy.name))
+            
+            if input("Do you want to change weapon?(yes/no) ").strip.upper == "YES":
+                self.choose_weapon()
+            
+
+
+    def end(self, player_win):
+        if player_win:
+            print("Congratulation!")
+            print("You defeated all the enemies!")
+            print("Here is your reward:")
+            print("|————————|")
+            print("|        |")
+            print("|________|")
+            print("\\________/")
+            print(" \\______/")
+            print("  |    |")
+            print(" _|____|_")
+        else:
+            print("You lose....")
+            print()
+            print("   \\__/   \\__/")
+            print("            /\\")
+            print("           |__|")
+            print("  _____________")
+            print(" /             \\")
+            print()
+        
+        print("Try again!")
+        quit()
+
+
+# beginning game
+
+game = Game()
+
+game.start()
+

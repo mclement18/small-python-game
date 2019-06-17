@@ -20,7 +20,7 @@ class Player:
         else:
             message1 = "uses"
             message2 = "has"
-
+        print()
         print("%s %s %s." %(self.name, message1, self.weapon.name))
         damages = game.damages_calculation(self)
         opponent.hp -= damages
@@ -63,25 +63,33 @@ class Game:
         self.start()
 
     def start(self):
+        print()
         print("'The Fight of Your Life'")
+        print()
         print("Ready to play the game?")
 
         while True:
             play = input("yes/no: ").strip().upper()
             if play == "NO":
+                print()
                 print("You're weak!!!")
+                print()
                 quit()
             elif play == "YES":
                 break
             else:
                 continue
-
+        print()
         print("Great! Fight your opponents until there are no more left!")
+        print()
+        print("-------------------------")
+        input("Press enter to continue")
 
         self.fighting_part()
 
     def choose_weapon(self, player):
         while True:
+            print()
             print("Choose your weapon!")
             print("Bow: stats")
             print("Gun: stats")
@@ -102,9 +110,11 @@ class Game:
                 player.activate_weapon()
                 break
             elif choice == "SURRENDER":
+                print()
                 print("Chicken!")
                 self.end(False)
             else:
+                print()
                 print("You don't have this weapon!")
                 continue
 
@@ -119,8 +129,13 @@ class Game:
 
         for enemy in enemy_list:
             rounds += 1
+            print()
             print("Round %d" %(rounds))
             print("Your opponent is %s." %(enemy.name))
+            print()
+            print("-------------------------")
+            input("Press enter to continue")
+            print()
             print("FIGHT!")
             player_start = True
             while enemy.hp > 0 and player.hp > 0:
@@ -131,17 +146,24 @@ class Game:
                 else:
                     enemy.attack(self, player)
                     player_start = True
-            
+
+                print()
+                print("-------------------------")
+                input("Press enter to continue")
+
             if player.hp <= 0:
+                print()
                 print("%s defeated you." %(enemy.name))
                 self.end(False)
             else:
+                print()
                 print("You defeated %s." %(enemy.name))
         
         self.end(True)
             
             
     def damages_calculation(self, player):
+        print()
         if random.random() < player.chance_to_miss:
             print("%s missed!" % (player.name))
             return 0
@@ -155,9 +177,11 @@ class Game:
 
     def end(self, player_win):
         if player_win:
+            print()
             print("Congratulation!")
             print("You defeated all the enemies!")
             print("Here is your reward:")
+            print()
             print("|————————|")
             print("|        |")
             print("|________|")
@@ -165,7 +189,9 @@ class Game:
             print(" \\______/")
             print("  |    |")
             print(" _|____|_")
+            print()
         else:
+            print()
             print("You lose....")
             print()
             print("   \\__/   \\__/")
@@ -176,13 +202,11 @@ class Game:
             print()
         
         print("Try again!")
+        print()
         quit()
 
 
 # beginning game
-# (self, bow, gun, bazooka, spoon, shoe, stapplers,
-#  liquid_n2, acid_gun, player1, enemy1, enemy2,
-#  enemy3, enemy4, enemy5)
 
 
 game = Game(

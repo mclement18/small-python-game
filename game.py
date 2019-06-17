@@ -27,7 +27,7 @@ class Player:
         print("%s lost %d HP and %s %d HP left." %(opponent.name, damages, message2, opponent.hp))
     
     def activate_weapon(self):
-        weapon.set_player_stats(self)
+        self.weapon.set_player_stats(self)
 
 # Define weapon calss
 class Weapon:
@@ -47,17 +47,11 @@ class Weapon:
 
 # Create game class
 class Game:
-    def __init__(self, bow, gun, bazooka, spoon, shoe, stapplers,
-                 liquid_n2, acid_gun, player1, enemy1, enemy2,
+    def __init__(self, bow, gun, bazooka, player1, enemy1, enemy2,
                  enemy3, enemy4, enemy5):
         self.bow = bow
         self.gun = gun
         self.bazooka = bazooka
-        self.spoon = spoon
-        self.shoe = shoe
-        self.stapplers = stapplers
-        self.liquid_n2 = liquid_n2
-        self.acid_gun = acid_gun
 
         self.player1 = player1
         self.enemy1 = enemy1
@@ -97,12 +91,15 @@ class Game:
 
             if choice == "BOW":
                 player.weapon = self.bow
+                player.activate_weapon()
                 break
             elif choice == "GUN":
                 player.weapon = self.gun
+                player.activate_weapon()
                 break
             elif choice == "BAZOOKA":
                 player.weapon = self.bazooka
+                player.activate_weapon()
                 break
             elif choice == "SURRENDER":
                 print("Chicken!")
@@ -126,7 +123,7 @@ class Game:
             print("Your opponent is %s." %(enemy.name))
             print("FIGHT!")
             player_start = True
-            while enemy.hp > 0 or player.hp > 0:
+            while enemy.hp > 0 and player.hp > 0:
                 if player_start:
                     self.choose_weapon(player)
                     player.attack(self, enemy)
@@ -188,4 +185,14 @@ class Game:
 #  enemy3, enemy4, enemy5)
 
 
-game = Game()
+game = Game(
+    Weapon("the bow", 10, 20, 0.3, 0.1),
+    Weapon("the gun", 25, 50, 0.1, 0.25),
+    Weapon("the bazooka", 50, 100, 0.05, 0.5),
+    Player("You", 250, Weapon("bare hand", 0, 0, 0, 1)),
+    Player("A crackhead", 50, Weapon("a dirty spoon", 5, 10, 0.01, 0.3)),
+    Player("A hobo", 100, Weapon("a stinky shoe", 10, 20, 0.05, 0.4)),
+    Player("A taxmen", 150, Weapon("a regular stappler", 20, 40, 0.1, 0.5)),
+    Player("A scientist", 200, Weapon("a tank of liquid nitrogen", 40, 80, 0.2, 0.6)),
+    Player("A psycho", 250, Weapon("an acid gun", 80, 160, 0.4, 0.7))
+)

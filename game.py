@@ -16,15 +16,18 @@ class Player:
     def attack(self, game, opponent):
         if self.name == "You":
             message1 = "use"
-            message2 = "have"
+            message2 = "has"
         else:
             message1 = "uses"
-            message2 = "has"
+            message2 = "have"
         print()
         print("%s %s %s." %(self.name, message1, self.weapon.name))
         damages = game.damages_calculation(self)
         opponent.hp -= damages
-        print("%s lost %d HP and %s %d HP left." %(opponent.name, damages, message2, opponent.hp))
+        if opponent.hp < 0:
+            print("%s lost %d HP and %s %d HP left." %(opponent.name, damages + opponent.hp, message2, 0))
+        else:
+            print("%s lost %d HP and %s %d HP left." %(opponent.name, damages, message2, opponent.hp))
     
     def activate_weapon(self):
         self.weapon.set_player_stats(self)
@@ -43,6 +46,9 @@ class Weapon:
         player.critical_damage = self.critical_damage
         player.chance_for_critcal_hit = self.chance_for_critcal_hit
         player.chance_to_miss = self.chance_to_miss
+
+    def show_weapon_stats(self):
+        print("Damages:%d / Critcal damages (probability):%d (%.2f) / Accuracy:%.2f" %(self.damage, self.critical_damage, self.chance_for_critcal_hit, 1 - self.chance_to_miss))
 
 
 # Create game class
@@ -91,9 +97,12 @@ class Game:
         while True:
             print()
             print("Choose your weapon!")
-            print("Bow: stats")
-            print("Gun: stats")
-            print("Bazooka: stats")
+            print("Bow: ", end = "")
+            self.bow.show_weapon_stats()
+            print("Gun: ", end = "")
+            self.gun.show_weapon_stats()
+            print("Bazooka: ", end = "")
+            self.bazooka.show_weapon_stats()
             print("Or surrender, if you're a chicken!")
             choice = input(": ").strip().upper()
 
@@ -164,15 +173,20 @@ class Game:
             
     def damages_calculation(self, player):
         print()
+        if player.name == "You":
+            message = "Your"
+        else:
+            message = player.name + "'s"
+
         if random.random() < player.chance_to_miss:
             print("%s missed!" % (player.name))
             return 0
         elif random.random() < player.chance_for_critcal_hit:
-            print("%s's attack succeeded!" %(player.name))
+            print("%s attack succeeded!" %(message))
             print("It's a critical hit!")
             return player.critical_damage
         else:
-            print("%s's attack succeeded!" %(player.name))
+            print("%s attack succeeded!" %(message))
             return player.damage
 
     def end(self, player_win):
@@ -210,13 +224,13 @@ class Game:
 
 
 game = Game(
-    Weapon("the bow", 10, 20, 0.3, 0.1),
-    Weapon("the gun", 25, 50, 0.1, 0.25),
-    Weapon("the bazooka", 50, 100, 0.05, 0.5),
-    Player("You", 250, Weapon("bare hand", 0, 0, 0, 1)),
-    Player("A crackhead", 50, Weapon("a dirty spoon", 5, 10, 0.01, 0.3)),
-    Player("A hobo", 100, Weapon("a stinky shoe", 10, 20, 0.05, 0.4)),
-    Player("A taxmen", 150, Weapon("a regular stappler", 20, 40, 0.1, 0.5)),
-    Player("A scientist", 200, Weapon("a tank of liquid nitrogen", 40, 80, 0.2, 0.6)),
-    Player("A psycho", 250, Weapon("an acid gun", 80, 160, 0.4, 0.7))
+    Weapon("the bow", 10, 20, 0.35, 0.1),
+    Weapon("the gun", 25, 50, 0.25, 0.2),
+    Weapon("the bazooka", 50, 100, 0.2, 0.3),
+    Player("You", 350, Weapon("bare hand", 0, 0, 0, 1)),
+    Player("Oluchi Pasternak the crackhead", 50, Weapon("a dirty spoon", 5, 10, 0.05, 0.2)),
+    Player("Willifrid Kovac the hobo", 100, Weapon("a stinky shoe", 10, 20, 0.1, 0.25)),
+    Player("Leander Günther the taxmen", 150, Weapon("a regular stappler", 15, 30, 0.15, 0.3)),
+    Player("Patrice Meeuwes the scientist", 200, Weapon("a tank of liquid nitrogen", 20, 40, 0.2, 0.35)),
+    Player("Methodios Franzese the psycho", 250, Weapon("an acid gun", 30, 60, 0.25, 0.45))
 )
